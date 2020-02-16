@@ -46,7 +46,7 @@ def data_read(filename):
     s = '' # a name of movie
     c = '' # a name of place or country
     k = 0
-    with open(filename, encoding = 'utf-8', errors='ignore') as f:
+    with open(filename, encoding = 'utf-8', errors = 'ignore') as f:
         for line in f:
             if len(line) > 1:
                 if line.strip().split()[0][0] not in ' " ':
@@ -54,7 +54,7 @@ def data_read(filename):
                 else:
                     if k % 100 == 0 and k != 0:
                         print("Searched", k, "films.....")
-                    if k > 10000:
+                    if k > 1000:
                         return lst
                     k += 1
                     line = line.strip().split()
@@ -108,6 +108,8 @@ def find_nearest(year, your_loc, films):
         if film[1] == "(" + year + ")":
             try:
                 geolocator = Nominatim(user_agent = "specify_your_app_name_here")
+                # from geopy.extra.rate_limiter import RateLimiter
+                # geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
                 location = geolocator.geocode(film[-1])
                 loc_city = (location.latitude, location.longitude)
                 distance = haversine(your_loc, loc_city)
@@ -150,7 +152,7 @@ def generate_map(locations, year, your_loc):
     file = year + '_movies_map.html'
     map.save(file)
     print('Finished. Please have look at the map ' + file)
-# generate_map(find_nearest("2014", (49.817906, 24.022997), data_read('locations.list')), "2014")
+# generate_map(find_nearest("2014", (49.817906, 24.022997), data_read('locations.list')), "2014", (49.817906, 24.022997))
 # generate_map(find_nearest("2014", (38.340272, -99.568177), data_read('locations.list')), "2014")
 
 
