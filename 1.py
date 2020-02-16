@@ -1,6 +1,6 @@
 import folium
 import pandas
-data = pandas.read_csv("Stan_1900.csv", error_bad_lines=False)
+data = pandas.read_csv("Stan_1900.csv", error_bad_lines = False)
 lat = data['lat']
 lon = data['lon']
 map = folium.Map(location=[48.314775, 25.082925], zoom_start=10)
