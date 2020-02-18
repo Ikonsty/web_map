@@ -33,6 +33,7 @@ def request():
     return (year, (int(lat), int(lon)))
 # print(request())
 
+
 def data_read(filename):
     """
     str -> lst
@@ -43,10 +44,10 @@ def data_read(filename):
         return None
     lst = []
     movie_names = []
-    s = '' # a name of movie
-    c = '' # a name of place or country
+    s = ''  # a name of movie
+    c = ''  # a name of place or country
     k = 0
-    with open(filename, encoding = 'utf-8', errors = 'ignore') as f:
+    with open(filename, encoding='utf-8', errors='ignore') as f:
         for line in f:
             if len(line) > 1:
                 if line.strip().split()[0][0] not in ' " ':
@@ -105,14 +106,14 @@ def find_nearest(year, your_loc, films):
     for film in films:
         if film[1] == "(" + year + ")":
             try:
-                geolocator = Nominatim(user_agent = "specify_your_app_name_here")
+                geolocator = Nominatim(user_agent="specify_your_app_name_here")
                 # from geopy.extra.rate_limiter import RateLimiter
                 # geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
                 location = geolocator.geocode(film[-1])
                 loc_city = (location.latitude, location.longitude)
                 distance = haversine(your_loc, loc_city)
                 distances.append((film[0], film[2], loc_city, distance))
-                distances.sort(key = lambda distance: distance[3])
+                distances.sort(key=lambda distance: distance[3])
             except:
                 pass
     for d in distances:
@@ -128,21 +129,18 @@ def generate_map(locations, year, your_loc):
     """
     lat = your_loc[0]
     lon = your_loc[1]
-    map = folium.Map(location = [lat, lon], zoom_start = 10)
-    fg_marker = folium.FeatureGroup(name = 'Film_layer')
+    map = folium.Map(location=[lat, lon], zoom_start=10)
+    fg_marker = folium.FeatureGroup(name='Film_layer')
     for city in locations:
         lt = city[-1][0]
         ln = city[-1][1]
         name = city[0]
         c = city[1]
-        fg_marker.add_child(folium.Marker(location = [lt, ln], popup = c + "\n\n" + name, icon = folium.Icon()))
+        fg_marker.add_child(folium.Marker(location=[lt, ln], popup=c + "\n\n" + name, icon=folium.Icon()))
 
-    fg_country = folium.FeatureGroup(name = 'Country_layer')
-    fg_country.add_child(folium.GeoJson(data = open('world.json', 'r', encoding = 'utf-8-sig').read(), \
-    style_function = lambda x: {'fillColor':'green' \
-    if x['properties']['POP2005'] < 10000000 \
-    else 'orange' if 10000000 <= x['properties']['POP2005'] < 20000000 \
-    else 'red'}))
+    fg_country = folium.FeatureGroup(name='Country_layer')
+    fg_country.add_child(folium.GeoJson(data=open('world.json', 'r', encoding='utf-8-sig').read(),
+    style_function=lambda x: {'fillColor': 'green' if x['properties']['POP2005'] < 10000000 else 'orange' if 10000000 <= x['properties']['POP2005'] < 20000000 else 'red'}))
 
     map.add_child(fg_marker)
     map.add_child(fg_country)
