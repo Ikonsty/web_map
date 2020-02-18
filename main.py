@@ -99,8 +99,6 @@ def find_nearest(year, your_loc, films):
     str, (int, int), lst -> lst
     Find the nearest shot muvie to your location in chosen year
     Distance in km
-    >>> find_nearest('2014', (49.817906, 24.022997), data_read('test.list'))
-
     """
     distances = []
     locations = []
